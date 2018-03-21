@@ -12,7 +12,8 @@
 
 NAME	=	ollevche.filler
 
-FLAGS	=	-Wall -Werror -Wextra -I./headers -I./libft/headers
+FLAGS	=	-Wall -Werror -Wextra -I./headers -I./libft/headers \
+			-I./libft/libft-gnl/headers/
 
 SRCDIR	=	./sources/
 
@@ -20,7 +21,7 @@ OBJDIR	=	./objects/
 
 LIBDIR	=	./libft/
 
-SRC		=	main.c
+SRC		=	main.c update_map.c
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.c=.o))
 
@@ -54,3 +55,4 @@ fclean: clean
 	@rm -rf $(NAME) $(LIB)
 
 re: fclean $(NAME)
+	

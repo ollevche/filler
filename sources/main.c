@@ -14,8 +14,9 @@
 
 //TODO: error handling
 //TODO: ft_strsplit review
+//TODO: check every malloc() for size
 
-static void	set_sides(t_map *map)
+void		set_sides(t_map *map)
 {
 	char	*player_exec;
 
@@ -49,32 +50,11 @@ static int	*get_line(int width)
 	return (line);
 }
 
-//move it to libft
-static void	free_strarr(char **arr)
+void		set_default_field(t_map *map)
 {
-	int i;
-
-	i = 0;
-	while (*(arr + i))
-	{
-		free(*(arr + i));
-		i++;
-	}
-	free(arr);
-}
-
-static void	set_default_field(t_map *map)
-{
-	char	*input;
-	char	**props;
 	int		i;
 
-	get_next_line(0, &input); //error can be here
-	props = ft_strsplit(input, ' '); //error can be here
-	free(input);
-	map->length = ft_atoi(props[1]); //error can be here
-	map->width = ft_atoi(props[2]); //error can be here
-	free_strarr(props);
+	get_size(&(map->length), &(map->width)); //error can be here
 	map->field = (int**)malloc(sizeof(int*) * map->length); //error can be here
 	i = 0;
 	while (i < map->length)
@@ -106,24 +86,47 @@ static void	set_default_field(t_map *map)
 // 	}
 // }
 
+static void	put_piece(t_piece *piece)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	while (i < piece->length)
+	{
+		j = 0;
+		while (j < piece->width)
+		{
+			str = ft_itoa(piece->field[i][j]);
+			write(2, str, ft_strlen(str));
+			write(2, "\t", 1);
+			j++;
+		}
+		write(2, "\n", 1);
+		i++;
+	}
+}
+
 int			main(void)
 {
 	t_map	*map;
-	// int		**piece;
-	// int		*coordinates;
+	t_piece	*piece;
+	int		*coordinates;
 
 	map = (t_map*)malloc(sizeof(t_map)); //error can be here
 	set_sides(map); //error can be here
 	set_default_field(map); //error can be here
-	while (1) // free_map();
+	while (1) // free_map(&map);
 	{
 		update_map(map);
-		piece = get_piece(); //TODO: implement it
-		// coordinates = place_piece(map, piece); //TODO: implement it
-		// ft_printf("%d %d\n", coordinates[0], coordinates[1]);
-		// free(piece);
-		// free(coordinates);
-		// //visualise_map(main_map);
+		piece = get_piece();
+		put_piece(piece);
+		coordinates = place_piece(map, piece); //TODO: implement it
+		ft_printf("%d %d\n", coordinates[0], coordinates[1]);
+		free_piece(&piece);
+		free(coordinates);
+		// visualise_map(main_map);
 	}
 	return (0);
 }

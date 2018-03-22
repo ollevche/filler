@@ -32,10 +32,38 @@ typedef struct	s_map
 	int	me;
 }				t_map;
 
+typedef struct	s_piece
+{
+	int	**field;
+	int	length;
+	int	width;
+}				t_piece;
+
+/*
+**	main.c
+*/
+
+void			set_sides(t_map *map);
+void			set_default_field(t_map *map);
+
 /*
 **	update_map.c
 */
 
 void			update_map(t_map *map);
+
+/*
+**	get_piece.c
+*/
+
+t_piece			*get_piece(void);
+
+/*
+**	util.c
+*/
+
+int				get_size(int *length, int *width);
+void			free_map(t_map **map);
+void			free_piece(t_piece **map);
 
 #endif

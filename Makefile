@@ -21,7 +21,7 @@ OBJDIR	=	./objects/
 
 LIBDIR	=	./libft/
 
-SRC		=	main.c update_map.c
+SRC		=	main.c update_map.c get_piece.c util.c
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.c=.o))
 
@@ -56,3 +56,5 @@ fclean: clean
 
 re: fclean $(NAME)
 	
+test: test.c $(LIBDIR)$(LIB)
+	@gcc -o test test.c $(LIB) $(FLAGS)

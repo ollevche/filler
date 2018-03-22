@@ -78,5 +78,5 @@ void		update_map(t_map *map)
 		}
 		i++;
 	}
-	// free_strarray(latest);
+	ft_free_strarr(&latest);
 }

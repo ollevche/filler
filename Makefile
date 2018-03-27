@@ -13,7 +13,7 @@
 NAME	=	ollevche.filler
 
 FLAGS	=	-Wall -Werror -Wextra -I./headers -I./libft/headers \
-			-I./libft/libft-gnl/headers/
+			-I./libft/library/headers/
 
 SRCDIR	=	./sources/
 

@@ -17,15 +17,18 @@ int		get_size(int *length, int *width)
 	char	*input;
 	char	**props;
 
-	get_next_line(0, &input); //error can be here
-	props = ft_strsplit(input, ' '); //error can be here
+	if (get_next_line(0, &input) == -1)
+		return (FAILURE_CODE);
+	props = ft_strsplit(input, ' ');
+	if (!props)
+		return (FAILURE_CODE);
 	free(input);
 	if (length)
-		*length = ft_atoi(props[1]); //error can be here
+		*length = ft_atoi(props[1]); // handle it
 	if (width)
-		*width = ft_atoi(props[2]); //error can be here
+		*width = ft_atoi(props[2]);
 	ft_free_strarr(&props);
-	return (1); // 0 - error
+	return (1);
 }
 
 void	free_map(t_map **map)

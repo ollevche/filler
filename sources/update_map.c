@@ -12,7 +12,7 @@
 
 #include "ollevche_filler.h"
 
-static void	set_enemy_cell(t_map *map, int enemy_i, int enemy_j)
+static int	set_enemy_cell(t_map *map, int enemy_i, int enemy_j)
 {
 	int i;
 	int j;
@@ -34,6 +34,7 @@ static void	set_enemy_cell(t_map *map, int enemy_i, int enemy_j)
 		}
 		i++;
 	}
+	return (1);
 }
 
 static char	**read_field(t_map *map)
@@ -42,41 +43,64 @@ static char	**read_field(t_map *map)
 	char	*line;
 	int		i;
 
-	get_next_line(0, &line);
+	if (get_next_line(0, &line) == -1) // potential leak
+		return (NULL);
 	free(line);
-	field = (char**)malloc(sizeof(char*) * map->length); //error can be here
+	field = (char**)malloc(sizeof(char*) * map->length);
+	if (!field)
+		return (NULL);
 	i = 0;
 	while (i < map->length)
 	{
-		get_next_line(0, &line); //error can be here
-		field[i] = ft_strsub(line, 4, map->width); //error can be here
+		if (get_next_line(0, &line) == -1)
+		{
+			field[i] = 0;
+			return (NULL);
+		}
+		field[i] = ft_strsub(line, 4, map->width);
 		free(line);
+		if (!field[i])
+			return (NULL);
 		i++;
 	}
 	return (field);
 }
 
-void		update_map(t_map *map)
+int			compare_cells(t_map *map, char **latest, int i, int j)
+{
+	int result;
+
+	result = 0;
+	if (latest[i][j] == map->enemy && map->field[i][j] > 0)
+		result = set_enemy_cell(map, i, j);
+	else if (latest[i][j] == map->me)
+		map->field[i][j] = 0;
+	return (result);
+}
+
+int			update_map(t_map *map)
 {
 	char	**latest;
+	int		updates;
 	int		i;
 	int		j;
 
-	latest = read_field(map); //error can be here
+	if (!(latest = read_field(map)))
+	{
+		ft_free_strarr(&latest);
+		return (FAILURE_CODE);
+	}
+	updates = 0;
 	i = 0;
 	while (i < map->length)
 	{
 		j = 0;
 		while (j < map->width)
 		{
-			if (latest[i][j] == map->enemy &&
-				map->field[i][j] > 0)
-				set_enemy_cell(map, i, j);
-			else if (latest[i][j] == map->me)
-				map->field[i][j] = 0;
+			updates += compare_cells(map, latest, i, j);
 			j++;
 		}
 		i++;
 	}
-	ft_free_strarr(&latest);
+	return (updates);
 }

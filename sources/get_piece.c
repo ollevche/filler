@@ -28,16 +28,6 @@ static char		**read_strarr(int length)
 	return (strarr);
 }
 
-// static void	put_strarr(char **strarr)
-// {
-// 	while (*strarr)
-// 	{
-// 		write(2, *strarr, ft_strlen(*strarr));
-// 		write(2, "\n", 1);
-// 		strarr++;
-// 	}
-// }
-
 static t_piece	*convert_to_piece(char **strarr)
 {
 	t_piece	*piece;

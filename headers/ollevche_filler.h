@@ -13,9 +13,9 @@
 #ifndef OLLEVCHE_FILLER_H
 # define OLLEVCHE_FILLER_H
 
-# include "libftprintf.h"
+# define FAILURE_CODE -1
 
-# define CHECK_FOR_NULL (X) (if (!X) return (NULL);) //is it useful?
+# include "libftprintf.h"
 
 /*
 **	0 < map->field[x][y] >> it's an empty cell
@@ -43,14 +43,15 @@ typedef struct	s_piece
 **	main.c
 */
 
-void			set_sides(t_map *map);
-void			set_default_field(t_map *map);
+int				execute_algorithm(t_map *map);
+int				set_default_field(t_map *map);
+int				set_sides(t_map *map);
 
 /*
 **	update_map.c
 */
 
-void			update_map(t_map *map);
+int				update_map(t_map *map);
 
 /*
 **	get_piece.c

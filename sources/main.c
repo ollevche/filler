@@ -16,22 +16,18 @@
 //TODO: ft_strsplit review
 //TODO: check every malloc() for size
 
-void		set_sides(t_map *map)
+int			set_sides(t_map *map)
 {
 	char	*player_exec;
+	int		is_p1;
 
-	get_next_line(0, &player_exec); //error can be here
-	if (ft_strstr(player_exec, "p1"))
-	{
-		map->me = 'O';
-		map->enemy = 'X';
-	}
-	else
-	{
-		map->me = 'X';
-		map->enemy = 'O';
-	}
+	if (get_next_line(0, &player_exec) == -1)
+		return (FAILURE_CODE);
+	is_p1 = ft_strstr(player_exec, "p1");
+	map->me = is_p1 ? 'O' : 'X';
+	map->enemy = is_p1 ? 'X' : 'O';
 	free(player_exec);
+	return (0);
 }
 
 static int	*get_line(int width)
@@ -39,7 +35,9 @@ static int	*get_line(int width)
 	int *line;
 	int	i;
 
-	line = (int*)malloc(sizeof(int) * (width + 1)); //error can be here
+	line = (int*)malloc(sizeof(int) * (width + 1));
+	if (!line)
+		return (NULL);
 	i = 0;
 	while (i < width)
 	{
@@ -50,83 +48,55 @@ static int	*get_line(int width)
 	return (line);
 }
 
-void		set_default_field(t_map *map)
+int			set_default_field(t_map *map)
 {
 	int		i;
 
-	get_size(&(map->length), &(map->width)); //error can be here
-	map->field = (int**)malloc(sizeof(int*) * map->length); //error can be here
+	if (get_size(&(map->length), &(map->width)) == FAILURE_CODE)
+		return (FAILURE_CODE);
+	map->field = (int**)malloc(sizeof(int*) * map->length);
+	if (!map->field)
+		return (FAILURE_CODE);
 	i = 0;
 	while (i < map->length)
 	{
-		map->field[i] = get_line(map->width); //error can be here
+		map->field[i] = get_line(map->width);
+		if (!map->field[i])
+			return (FAILURE_CODE);
 		i++;
 	}
+	return (0);
 }
 
-// static void	put_map(t_map *map)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*str;
-
-// 	i = 0;
-// 	while (i < map->length)
-// 	{
-// 		j = 0;
-// 		while (j < map->width)
-// 		{
-// 			str = ft_itoa(map->field[i][j]);
-// 			write(2, str, ft_strlen(str));
-// 			write(2, "\t", 1);
-// 			j++;
-// 		}
-// 		write(2, "\n", 1);
-// 		i++;
-// 	}
-// }
-
-static void	put_piece(t_piece *piece)
+int			execute_algorithm(t_map *map)
 {
-	int		i;
-	int		j;
-	char	*str;
+	t_piece *piece;
+	int		updates;
 
-	i = 0;
-	while (i < piece->length)
-	{
-		j = 0;
-		while (j < piece->width)
-		{
-			str = ft_itoa(piece->field[i][j]);
-			write(2, str, ft_strlen(str));
-			write(2, "\t", 1);
-			j++;
-		}
-		write(2, "\n", 1);
-		i++;
-	}
+	updates = update_map(map);
+	// piece = get_piece();
+	// coordinates = place_piece(map, piece); //TODO: implement it
+	// ft_printf("%d %d\n", coordinates[0], coordinates[1]);
+	free_piece(&piece);
+	free(coordinates);
+	return (1);
 }
 
 int			main(void)
 {
 	t_map	*map;
-	t_piece	*piece;
-	int		*coordinates;
 
-	map = (t_map*)malloc(sizeof(t_map)); //error can be here
-	set_sides(map); //error can be here
-	set_default_field(map); //error can be here
+	if (!(map = (t_map*)malloc(sizeof(t_map))))
+		return (FAILURE_CODE);
+	if (set_sides(map) || set_default_field(map))
+	{
+		free_map(&map);
+		return (FAILURE_CODE);
+	}
 	while (1) // free_map(&map);
 	{
-		update_map(map);
-		piece = get_piece();
-		put_piece(piece);
-		coordinates = place_piece(map, piece); //TODO: implement it
-		ft_printf("%d %d\n", coordinates[0], coordinates[1]);
-		free_piece(&piece);
-		free(coordinates);
-		// visualise_map(main_map);
+		execute_algorithm(map);
+		// visualise_map(map);
 	}
 	return (0);
 }

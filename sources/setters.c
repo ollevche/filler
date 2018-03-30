@@ -9,8 +9,8 @@ int			set_sides(t_map *map)
 	if (!(player_exec = safe_gnl(0)))
 		return (FAILURE_CODE);
 	is_p1 = ft_strstr(player_exec, "p1") ? 1 : 0;
-	map->ally = is_p1 ? 'O' : 'X';
-	map->enemy = is_p1 ? 'X' : 'O';
+	map->ally = is_p1 ? 'o' : 'x';
+	map->enemy = is_p1 ? 'x' : 'o';
 	free(player_exec);
 	return (1);
 }

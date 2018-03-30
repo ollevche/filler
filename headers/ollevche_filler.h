@@ -35,6 +35,13 @@ typedef struct	s_piece
 	int	width;
 }				t_piece;
 
+typedef struct	s_pos
+{
+	int	length;
+	int	width;
+	int	sum;
+}				t_pos;
+
 /*
 **	main.c
 */
@@ -59,6 +66,12 @@ int				update_map(t_map *map);
 */
 
 t_piece			*get_piece(void);
+
+/*
+**	place_piece.c
+**/
+
+t_pos			*place_piece(t_map *map, t_piece *piece);
 
 /*
 **	util.c

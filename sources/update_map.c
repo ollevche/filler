@@ -29,6 +29,7 @@ static char	**read_field(t_map *map)
 	{
 		line = safe_gnl(0);
 		field[i] = ft_strsub(line, 4, map->width);
+		field[i] = ft_strtolow(field[i]);
 		free(line);
 		if (!field[i])
 		{

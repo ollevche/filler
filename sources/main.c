@@ -13,10 +13,56 @@
 #include "ollevche_filler.h"
 
 //TODO: ft_strsplit review
+//TODO: player char can be upper or lower in different cases
+
+// static void	put_map(t_map *map)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*str;
+
+// 	i = 0;
+// 	while (i < map->length)
+// 	{
+// 		j = 0;
+// 		while (j < map->width)
+// 		{
+// 			str = ft_itoa(map->field[i][j]);
+// 			write(2, str, ft_strlen(str));
+// 			write(2, "\t", 1);
+// 			j++;
+// 		}
+// 		write(2, "\n", 1);
+// 		i++;
+// 	}
+// }
+
+// static void	put_piece(t_piece *piece)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*str;
+
+// 	i = 0;
+// 	while (i < piece->length)
+// 	{
+// 		j = 0;
+// 		while (j < piece->width)
+// 		{
+// 			str = ft_itoa(piece->field[i][j]);
+// 			write(2, str, ft_strlen(str));
+// 			write(2, "\t", 1);
+// 			j++;
+// 		}
+// 		write(2, "\n", 1);
+// 		i++;
+// 	}
+// }
 
 int			execute_algorithm(t_map *map)
 {
 	t_piece *piece;
+	t_pos	*position;
 	int		updates;
 
 	updates = update_map(map);
@@ -25,10 +71,10 @@ int			execute_algorithm(t_map *map)
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
-	// coordinates = place_piece(map, piece); //TODO: implement it
-	// ft_printf("%d %d\n", coordinates[0], coordinates[1]);
+	position = place_piece(map, piece);
+	ft_printf("%d %d\n", position->length, position->width);
 	free_piece(&piece);
-	// free(coordinates);
+	free(position);
 	return (1);
 }
 

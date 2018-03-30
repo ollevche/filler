@@ -12,6 +12,34 @@
 
 #include "ollevche_filler.h"
 
+static char	**read_field(t_map *map)
+{
+	char	**field;
+	char	*line;
+	int		i;
+
+	if (!(line = safe_gnl(0)))
+		return (NULL);
+	free(line);
+	field = (char**)malloc(sizeof(char*) * map->length);
+	if (!field)
+		return (NULL);
+	i = 0;
+	while (i < map->length)
+	{
+		line = safe_gnl(0);
+		field[i] = ft_strsub(line, 4, map->width);
+		free(line);
+		if (!field[i])
+		{
+			ft_free_strarr(field);
+			return (NULL);
+		}
+		i++;
+	}
+	return (field);
+}
+
 static int	set_enemy_cell(t_map *map, int enemy_i, int enemy_j)
 {
 	int i;
@@ -28,54 +56,13 @@ static int	set_enemy_cell(t_map *map, int enemy_i, int enemy_j)
 				map->field[i][j] += (enemy_i - i) * (enemy_i > i ? 1 : -1);
 				map->field[i][j] += (enemy_j - j) * (enemy_j > j ? 1 : -1);
 			}
-			else if (map->field[i][j] != 0)
-				map->field[i][j] = -1;
+			else if (map->field[i][j] != ALLY_ID)
+				map->field[i][j] = ENEMY_ID;
 			j++;
 		}
 		i++;
 	}
 	return (1);
-}
-
-static char	**read_field(t_map *map)
-{
-	char	**field;
-	char	*line;
-	int		i;
-
-	if (get_next_line(0, &line) == -1) // potential leak
-		return (NULL);
-	free(line);
-	field = (char**)malloc(sizeof(char*) * map->length);
-	if (!field)
-		return (NULL);
-	i = 0;
-	while (i < map->length)
-	{
-		if (get_next_line(0, &line) == -1)
-		{
-			field[i] = 0;
-			return (NULL);
-		}
-		field[i] = ft_strsub(line, 4, map->width);
-		free(line);
-		if (!field[i])
-			return (NULL);
-		i++;
-	}
-	return (field);
-}
-
-int			compare_cells(t_map *map, char **latest, int i, int j)
-{
-	int result;
-
-	result = 0;
-	if (latest[i][j] == map->enemy && map->field[i][j] > 0)
-		result = set_enemy_cell(map, i, j);
-	else if (latest[i][j] == map->me)
-		map->field[i][j] = 0;
-	return (result);
 }
 
 int			update_map(t_map *map)
@@ -85,11 +72,9 @@ int			update_map(t_map *map)
 	int		i;
 	int		j;
 
-	if (!(latest = read_field(map)))
-	{
-		ft_free_strarr(&latest);
+	latest = read_field(map);
+	if (!latest)
 		return (FAILURE_CODE);
-	}
 	updates = 0;
 	i = 0;
 	while (i < map->length)
@@ -97,7 +82,10 @@ int			update_map(t_map *map)
 		j = 0;
 		while (j < map->width)
 		{
-			updates += compare_cells(map, latest, i, j);
+			if (latest[i][j] == map->enemy && map->field[i][j] > 0)
+				updates += set_enemy_cell(map, i, j);
+			else if (latest[i][j] == map->ally)
+				map->field[i][j] = ALLY_ID;
 			j++;
 		}
 		i++;

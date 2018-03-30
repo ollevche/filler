@@ -13,15 +13,11 @@
 #ifndef OLLEVCHE_FILLER_H
 # define OLLEVCHE_FILLER_H
 
-# define FAILURE_CODE -1
-
 # include "libftprintf.h"
 
-/*
-**	0 < map->field[x][y] >> it's an empty cell
-**	map->field[x][y] == 0 >> it's a friendly cell
-**	map->field[x][[y] == -1 >> it's an enemy cell
-*/
+# define FAILURE_CODE -1
+# define ENEMY_ID 0
+# define ALLY_ID -1
 
 typedef struct	s_map
 {
@@ -29,7 +25,7 @@ typedef struct	s_map
 	int	length;
 	int	width;
 	int	enemy;
-	int	me;
+	int	ally;
 }				t_map;
 
 typedef struct	s_piece
@@ -44,6 +40,11 @@ typedef struct	s_piece
 */
 
 int				execute_algorithm(t_map *map);
+
+/*
+**	setters.c
+*/
+
 int				set_default_field(t_map *map);
 int				set_sides(t_map *map);
 
@@ -66,5 +67,6 @@ t_piece			*get_piece(void);
 int				get_size(int *length, int *width);
 void			free_map(t_map **map);
 void			free_piece(t_piece **map);
+char			*safe_gnl(int fd);
 
 #endif

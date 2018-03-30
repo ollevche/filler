@@ -12,38 +12,45 @@
 
 #include "ollevche_filler.h"
 
-static char		**read_strarr(int length)
+static char	**read_strarr(int length)
 {
 	char	**strarr;
 	int		i;
 
-	strarr = (char**)malloc(sizeof(char*) * (length + 1)); //error can be here
+	strarr = (char**)malloc(sizeof(char*) * (length + 1));
+	if (!strarr)
+		return (NULL);
 	i = 0;
 	while (i < length)
 	{
-		get_next_line(0, &(strarr[i])); //error can be here
+		strarr[i] = safe_gnl(0);
+		if (!strarr[i])
+		{
+			ft_free_strarr(strarr);
+			return (NULL);
+		}
 		i++;
 	}
 	strarr[length] = NULL;
 	return (strarr);
 }
 
-static t_piece	*convert_to_piece(char **strarr)
+static int	*convert_to_piece(char **strarr, t_piece *piece)
 {
-	t_piece	*piece;
 	int		i;
 	int		j;
 
-	piece = (t_piece*)malloc(sizeof(t_piece)); //error can be here
-	piece->width = ft_strlen(strarr[0]);
-	i = 0;
-	while (strarr[i++]);
-	piece->length = i - 1;
-	piece->field = (int**)malloc(sizeof(int*) * i); //error can be here
+	if (!strarr)
+		return (FAILURE_CODE);
+	piece->field = (int**)malloc(sizeof(int*) * piece->length);
+	if (!piece->field)
+		return (FAILURE_CODE);
 	i = 0;
 	while (i < piece->length)
 	{
-		piece->field[i] = (int*)malloc(sizeof(int) * piece->width); //error can be here
+		piece->field[i] = (int*)malloc(sizeof(int) * piece->width);
+		if (!piece->field[i])
+			return (FAILURE_CODE);
 		j = 0;
 		while (j < piece->width)
 		{
@@ -55,21 +62,27 @@ static t_piece	*convert_to_piece(char **strarr)
 		}
 		i++;
 	}
-	return (piece);
+	return (1);
 }
 
-t_piece			*get_piece(void)
+t_piece		*get_piece(void)
 {
-	t_piece	*piece;
-	char	**strarr;
 	int		length;
-	char	**cut_strarr;
+	char	**strarr;
+	t_piece	*piece;
 
-	get_size(&length, NULL);  //error can be here
-	strarr = read_strarr(length);  //error can be here
-	cut_strarr = ft_strarr_trim(strarr, '*');  //error can be here
+	if (get_size(&length, NULL) == FAILURE_CODE)
+		return (NULL);
+	strarr = read_strarr(length);
+	piece = (t_piece*)malloc(sizeof(t_piece));
+	if (piece)
+	{
+		piece->width = ft_strlen(strarr[0]);
+		piece->length = length;
+		piece->field = NULL;
+		if (convert_to_piece(strarr, piece) == FAILURE_CODE)
+			free_piece(&piece)
+	}
 	ft_free_strarr(&strarr);
-	piece = convert_to_piece(cut_strarr);  //error can be here
-	ft_free_strarr(&cut_strarr);
 	return (piece);
 }

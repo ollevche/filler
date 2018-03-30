@@ -12,19 +12,19 @@
 
 #include "ollevche_filler.h"
 
-int		get_size(int *length, int *width)
+int		get_size(int *length, int *width) // is it useful?
 {
 	char	*input;
 	char	**props;
 
-	if (get_next_line(0, &input) == -1)
+	if (!(input = safe_gnl(0)))
 		return (FAILURE_CODE);
 	props = ft_strsplit(input, ' ');
 	if (!props)
 		return (FAILURE_CODE);
 	free(input);
 	if (length)
-		*length = ft_atoi(props[1]); // handle it
+		*length = ft_atoi(props[1]);
 	if (width)
 		*width = ft_atoi(props[2]);
 	ft_free_strarr(&props);
@@ -59,4 +59,16 @@ void	free_piece(t_piece **piece)
 	free((*piece)->field);
 	free(*piece);
 	*piece = NULL;
+}
+
+char	*safe_gnl(int fd)
+{
+	char	*line;
+	int		ret_value;
+
+	line = NULL;
+	ret_value = get_next_line(fd, &line);
+	if (ret_value == -1)
+		ft_memdel(&line);
+	return (line);
 }

@@ -32,7 +32,7 @@ static char	**read_field(t_map *map)
 		free(line);
 		if (!field[i])
 		{
-			ft_free_strarr(field);
+			ft_free_strarr(&field);
 			return (NULL);
 		}
 		i++;

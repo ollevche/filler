@@ -26,7 +26,7 @@ static char	**read_strarr(int length)
 		strarr[i] = safe_gnl(0);
 		if (!strarr[i])
 		{
-			ft_free_strarr(strarr);
+			ft_free_strarr(&strarr);
 			return (NULL);
 		}
 		i++;
@@ -35,7 +35,7 @@ static char	**read_strarr(int length)
 	return (strarr);
 }
 
-static int	*convert_to_piece(char **strarr, t_piece *piece)
+static int	convert_to_piece(char **strarr, t_piece *piece)
 {
 	int		i;
 	int		j;
@@ -81,7 +81,7 @@ t_piece		*get_piece(void)
 		piece->length = length;
 		piece->field = NULL;
 		if (convert_to_piece(strarr, piece) == FAILURE_CODE)
-			free_piece(&piece)
+			free_piece(&piece);
 	}
 	ft_free_strarr(&strarr);
 	return (piece);

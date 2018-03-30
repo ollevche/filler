@@ -28,7 +28,7 @@ int			execute_algorithm(t_map *map)
 	// coordinates = place_piece(map, piece); //TODO: implement it
 	// ft_printf("%d %d\n", coordinates[0], coordinates[1]);
 	free_piece(&piece);
-	free(coordinates);
+	// free(coordinates);
 	return (1);
 }
 

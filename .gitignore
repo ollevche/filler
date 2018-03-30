@@ -1,4 +1,4 @@
 /objects/*
-/resources/*
 libftprintf.a
 ollevche.filler
+/resources/filler.trace

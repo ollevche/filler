@@ -25,7 +25,6 @@ int			execute_algorithm(t_map *map)
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
-
 	// coordinates = place_piece(map, piece); //TODO: implement it
 	// ft_printf("%d %d\n", coordinates[0], coordinates[1]);
 	free_piece(&piece);
@@ -41,7 +40,8 @@ int			main(void)
 	map = (t_map*)malloc(sizeof(t_map));
 	if (!map)
 		return (FAILURE_CODE);
-	if (set_sides(map) || set_default_field(map))
+	if (set_sides(map) == FAILURE_CODE || 
+		set_default_field(map) == FAILURE_CODE)
 	{
 		free_map(&map);
 		return (FAILURE_CODE);

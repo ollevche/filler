@@ -40,8 +40,6 @@ static int	*convert_to_piece(char **strarr, t_piece *piece)
 	int		i;
 	int		j;
 
-	if (!strarr)
-		return (FAILURE_CODE);
 	piece->field = (int**)malloc(sizeof(int*) * piece->length);
 	if (!piece->field)
 		return (FAILURE_CODE);
@@ -74,6 +72,8 @@ t_piece		*get_piece(void)
 	if (get_size(&length, NULL) == FAILURE_CODE)
 		return (NULL);
 	strarr = read_strarr(length);
+	if (!strarr)
+		return (NULL);
 	piece = (t_piece*)malloc(sizeof(t_piece));
 	if (piece)
 	{

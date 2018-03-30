@@ -12,7 +12,7 @@
 
 #include "ollevche_filler.h"
 
-int		get_size(int *length, int *width) // is it useful?
+int		get_size(int *length, int *width)
 {
 	char	*input;
 	char	**props;
@@ -20,9 +20,9 @@ int		get_size(int *length, int *width) // is it useful?
 	if (!(input = safe_gnl(0)))
 		return (FAILURE_CODE);
 	props = ft_strsplit(input, ' ');
+	free(input);
 	if (!props)
 		return (FAILURE_CODE);
-	free(input);
 	if (length)
 		*length = ft_atoi(props[1]);
 	if (width)
@@ -36,7 +36,7 @@ void	free_map(t_map **map)
 	int i;
 
 	i = 0;
-	while (i < (*map)->length)
+	while ((*map)->field[i] && i < (*map)->length)
 	{
 		free((*map)->field[i]);
 		i++;
@@ -51,7 +51,7 @@ void	free_piece(t_piece **piece)
 	int i;
 
 	i = 0;
-	while (i < (*piece)->length)
+	while ((*piece)->field[i] && i < (*piece)->length)
 	{
 		free((*piece)->field[i]);
 		i++;

@@ -8,11 +8,11 @@ int			set_sides(t_map *map)
 
 	if (!(player_exec = safe_gnl(0)))
 		return (FAILURE_CODE);
-	is_p1 = ft_strstr(player_exec, "p1");
+	is_p1 = ft_strstr(player_exec, "p1") ? 1 : 0;
 	map->ally = is_p1 ? 'O' : 'X';
 	map->enemy = is_p1 ? 'X' : 'O';
 	free(player_exec);
-	return (0);
+	return (1);
 }
 
 static int	*get_line(int width)
@@ -20,7 +20,7 @@ static int	*get_line(int width)
 	int *line;
 	int	i;
 
-	line = (int*)malloc(sizeof(int) * (width + 1));
+	line = (int*)malloc(sizeof(int) * width);
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -29,7 +29,6 @@ static int	*get_line(int width)
 		line[i] = 1;
 		i++;
 	}
-	line[i] = -3;
 	return (line);
 }
 
@@ -52,5 +51,5 @@ int			set_default_field(t_map *map)
 			return (FAILURE_CODE);
 		i++;
 	}
-	return (0);
+	return (1);
 }

@@ -13,29 +13,40 @@
 #include "ollevche_filler.h"
 
 // TODO: ft_strsplit review
-// TODO: fix segfault
+// TODO: fix segfault (or it's not a segfault?)
 
 int			execute_algorithm(t_map *map)
 {
 	t_piece *piece;
 	t_pos	*position;
 	int		updates;
+	int		iter_result;
 
 	updates = update_map(map);
 	if (updates == FAILURE_CODE)
 		return (FAILURE_CODE);
+	// write(2, "updated map\n", 12); // DEL
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
+	// write(2, "got piece\n", 10); // DEL
 	position = place_piece(map, piece);
-	if (position)
-		ft_printf("%d %d\n", position->length, position->width);
 	free_piece(&piece);
 	if (!position)
 		return (FAILURE_CODE);
+	// write(2, "placed piece\n", 13); // DEL
+	ft_printf("%d %d\n", position->length, position->width);
+	// write(2, "printed position\n", 17); // DEL
+	iter_result = 1;
+	if (position->length < 0 && position->width < 0)
+		iter_result = 0;
 	free(position);
 	map->iteration++;
-	return (1);
+	// if (updates || iter_result) // DEL
+		// write(2, "result: OK\n", 11); // DEL
+	// else // DEL
+		// write(2, "result: NOT OK\n", 15); // DEL
+	return (updates || iter_result);
 }
 
 int			main(void)

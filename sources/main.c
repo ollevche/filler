@@ -13,6 +13,7 @@
 #include "ollevche_filler.h"
 
 // TODO: ft_strsplit review
+// TODO: fix segfault
 
 int			execute_algorithm(t_map *map)
 {

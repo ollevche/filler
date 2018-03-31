@@ -26,6 +26,7 @@ typedef struct	s_map
 	int	width;
 	int	enemy;
 	int	ally;
+	int	iteration;
 }				t_map;
 
 typedef struct	s_piece

@@ -12,34 +12,32 @@
 
 #include "ollevche_filler.h"
 
-#include <fcntl.h>
-static void	put_field(char **field)
-{
-	int		i;
-	int		fd;
+// #include <fcntl.h>
+// static void	put_field(char **field)
+// {
+// 	int		i;
+// 	int		fd;
 
-	fd = open("debug", O_RDWR | O_APPEND);
-	i = 0;
-	while (field[i])
-	{
-		ft_putstr_fd(field[i], fd);
-		write(fd, "\n", 1);
-		i++;
-	}
-	write(fd, "\n", 1);
-	close(fd);
-}
+// 	fd = open("debug", O_RDWR | O_APPEND);
+// 	i = 0;
+// 	while (field[i])
+// 	{
+// 		ft_putstr_fd(field[i], fd);
+// 		write(fd, "\n", 1);
+// 		i++;
+// 	}
+// 	write(fd, "\n", 1);
+// 	close(fd);
+// }
 
-static char	**read_field(t_map *map)
+static char	**read_field(t_map *map, int skippings)
 {
 	char		**field;
 	char		*line;
 	int			i;
-	static int	skipping = 1;
 
-	if (skip_lines(skipping) == FAILURE_CODE)
+	if (skip_lines(skippings) == FAILURE_CODE)
 		return (NULL);
-	skipping = 2;
 	field = (char**)malloc(sizeof(char*) * (map->length + 1));
 	if (!field)
 		return (NULL);
@@ -58,7 +56,6 @@ static char	**read_field(t_map *map)
 		i++;
 	}
 	field[i] = NULL;
-	put_field(field); //DEL
 	return (field);
 }
 
@@ -94,7 +91,7 @@ int			update_map(t_map *map)
 	int		i;
 	int		j;
 
-	latest = read_field(map);
+	latest = read_field(map, 1 + (map->iteration > 1));
 	if (!latest)
 		return (FAILURE_CODE);
 	updates = 0;

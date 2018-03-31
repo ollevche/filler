@@ -12,16 +12,35 @@
 
 #include "ollevche_filler.h"
 
+#include <fcntl.h>
+static void	put_field(char **field)
+{
+	int		i;
+	int		fd;
+
+	fd = open("debug", O_RDWR | O_APPEND);
+	i = 0;
+	while (field[i])
+	{
+		ft_putstr_fd(field[i], fd);
+		write(fd, "\n", 1);
+		i++;
+	}
+	write(fd, "\n", 1);
+	close(fd);
+}
+
 static char	**read_field(t_map *map)
 {
-	char	**field;
-	char	*line;
-	int		i;
+	char		**field;
+	char		*line;
+	int			i;
+	static int	skipping = 1;
 
-	if (!(line = safe_gnl(0)))
+	if (skip_lines(skipping) == FAILURE_CODE)
 		return (NULL);
-	free(line);
-	field = (char**)malloc(sizeof(char*) * map->length);
+	skipping = 2;
+	field = (char**)malloc(sizeof(char*) * (map->length + 1));
 	if (!field)
 		return (NULL);
 	i = 0;
@@ -38,6 +57,8 @@ static char	**read_field(t_map *map)
 		}
 		i++;
 	}
+	field[i] = NULL;
+	put_field(field); //DEL
 	return (field);
 }
 

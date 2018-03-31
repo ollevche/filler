@@ -81,5 +81,6 @@ int				get_size(int *length, int *width);
 void			free_map(t_map **map);
 void			free_piece(t_piece **map);
 char			*safe_gnl(int fd);
+int				skip_lines(int amount);
 
 #endif

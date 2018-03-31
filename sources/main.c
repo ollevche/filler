@@ -15,12 +15,15 @@
 //TODO: ft_strsplit review
 //TODO: player char can be upper or lower in different cases
 
+// #include <fcntl.h>
 // static void	put_map(t_map *map)
 // {
 // 	int		i;
 // 	int		j;
 // 	char	*str;
+// 	int		fd;
 
+// 	fd = open("debug", O_RDWR | O_APPEND);
 // 	i = 0;
 // 	while (i < map->length)
 // 	{
@@ -28,13 +31,15 @@
 // 		while (j < map->width)
 // 		{
 // 			str = ft_itoa(map->field[i][j]);
-// 			write(2, str, ft_strlen(str));
-// 			write(2, "\t", 1);
+// 			write(fd, str, ft_strlen(str));
+// 			write(fd, "\t", 1);
 // 			j++;
 // 		}
-// 		write(2, "\n", 1);
+// 		write(fd, "\n", 1);
 // 		i++;
 // 	}
+// 	write(fd, "\n", 1);
+// 	close(fd);
 // }
 
 // static void	put_piece(t_piece *piece)
@@ -42,7 +47,9 @@
 // 	int		i;
 // 	int		j;
 // 	char	*str;
+// 	int		fd;
 
+// 	fd = open("debug", O_RDWR | O_APPEND);
 // 	i = 0;
 // 	while (i < piece->length)
 // 	{
@@ -50,13 +57,15 @@
 // 		while (j < piece->width)
 // 		{
 // 			str = ft_itoa(piece->field[i][j]);
-// 			write(2, str, ft_strlen(str));
-// 			write(2, "\t", 1);
+// 			write(fd, str, ft_strlen(str));
+// 			write(fd, "\t", 1);
 // 			j++;
 // 		}
-// 		write(2, "\n", 1);
+// 		write(fd, "\n", 1);
 // 		i++;
 // 	}
+// 	write(fd, "\n", 1);
+// 	close(fd);
 // }
 
 int			execute_algorithm(t_map *map)

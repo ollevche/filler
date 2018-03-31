@@ -72,3 +72,20 @@ char	*safe_gnl(int fd)
 		ft_memdel((void**)&line);
 	return (line);
 }
+
+int		skip_lines(int amount)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (i < amount)
+	{
+		line = safe_gnl(0);
+		if (!line)
+			return (FAILURE_CODE);
+		free(line);
+		i++;
+	}
+	return (1);
+}

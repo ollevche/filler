@@ -85,7 +85,7 @@ int			update_map(t_map *map)
 		{
 			if (latest[i][j] == map->enemy && map->field[i][j] > 0)
 				updates += set_enemy_cell(map, i, j);
-			else if (latest[i][j] == map->ally)
+			else if (latest[i][j] == map->ally && map->field[i][j] > 0)
 				map->field[i][j] = ALLY_ID;
 			j++;
 		}

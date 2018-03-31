@@ -12,24 +12,6 @@
 
 #include "ollevche_filler.h"
 
-// #include <fcntl.h>
-// static void	put_field(char **field)
-// {
-// 	int		i;
-// 	int		fd;
-
-// 	fd = open("debug", O_RDWR | O_APPEND);
-// 	i = 0;
-// 	while (field[i])
-// 	{
-// 		ft_putstr_fd(field[i], fd);
-// 		write(fd, "\n", 1);
-// 		i++;
-// 	}
-// 	write(fd, "\n", 1);
-// 	close(fd);
-// }
-
 static char	**read_field(t_map *map, int skippings)
 {
 	char		**field;

@@ -1,5 +1,6 @@
 
 #include "ollevche_filler.h"
+#include <limits.h>
 
 static t_pos	*new_position(void)
 {
@@ -8,7 +9,7 @@ static t_pos	*new_position(void)
 	position = (t_pos*)malloc(sizeof(t_pos));
 	if (!position)
 		return (NULL);
-	position->sum = -1;
+	position->sum = INT_MAX;
 	position->length = -1;
 	position->width = -1;
 	return (position);
@@ -33,8 +34,8 @@ static int		get_sum(t_map *map, t_piece *piece, int mi, int mj)
 			{
 				if (map->field[mi + pi][mj + pj] == ALLY_ID)
 					ally_col++;
-				else if (map->field[mi + pi][mj + pj] == ALLY_ID)
-					return (-1);
+				else if (map->field[mi + pi][mj + pj] == ENEMY_ID)
+					return (INT_MAX);
 				else
 					sum += map->field[mi + pi][mj + pj];
 			}
@@ -43,7 +44,7 @@ static int		get_sum(t_map *map, t_piece *piece, int mi, int mj)
 		pi++;
 	}
 	if (ally_col != 1 || pi != piece->length || pj != piece->width) //it wouldn't works with empty cells outside of map borders
-		return (-1);
+		return (INT_MAX);
 	else
 		return (sum);
 }
@@ -64,7 +65,7 @@ t_pos			*place_piece(t_map *map, t_piece *piece)
 		while (j < map->width)
 		{
 			cur_sum = get_sum(map, piece, i, j);
-			if (cur_sum > position->sum)
+			if (cur_sum < position->sum)
 			{
 				position->length = i;
 				position->width = j;

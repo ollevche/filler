@@ -43,7 +43,8 @@ static int		get_sum(t_map *map, t_piece *piece, int mi, int mj)
 		}
 		pi++;
 	}
-	if (ally_col != 1 || pi != piece->length || pj != piece->width) //it wouldn't works with empty cells outside of map borders
+	//it wouldn't works with empty cells outside of map borders
+	if (ally_col != 1 || pi != piece->length || pj != piece->width)
 		return (INT_MAX);
 	else
 		return (sum);

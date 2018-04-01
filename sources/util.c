@@ -21,7 +21,7 @@ int		get_size(int *length, int *width)
 		return (FAILURE_CODE);
 	props = ft_strsplit(input, ' ');
 	free(input);
-	if (!props)
+	if (!props || !*props)
 		return (FAILURE_CODE);
 	if (length)
 		*length = ft_atoi(props[1]);

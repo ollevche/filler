@@ -12,9 +12,11 @@
 
 #include "ollevche_filler.h"
 
-// TODO: ft_strsplit review
-// TODO: fix segfault (or it's not a segfault?)
+// TODO: move safe_gnl() to library
 // TODO: improve file structure
+// TODO: leaks
+// TODO: ft_strsplit review
+// TODO: norminette
 
 int			execute_algorithm(t_map *map)
 {
@@ -23,32 +25,22 @@ int			execute_algorithm(t_map *map)
 	int		updates;
 	int		iter_result;
 
-	write(2, "iteration begins\n", 17);
 	updates = update_map(map);
 	if (updates == FAILURE_CODE)
 		return (FAILURE_CODE);
-	write(2, "updated map\n", 12); // DEL
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
-	write(2, "got piece\n", 10); // DEL
 	position = place_piece(map, piece);
 	free_piece(&piece);
 	if (!position)
 		return (FAILURE_CODE);
-	write(2, "placed piece\n", 13); // DEL
 	ft_printf("%d %d\n", position->length, position->width);
-	write(2, "printed position\n", 17); // DEL
 	iter_result = 1;
 	if (position->length < 0 && position->width < 0)
 		iter_result = 0;
 	free(position);
 	map->iteration++;
-	if (updates || iter_result) // DEL
-		write(2, "result: OK\n", 11); // DEL
-	else // DEL
-		write(2, "result: NOT OK\n", 15); // DEL
-	write(2, "iteration ends\n", 15);
 	return (updates || iter_result);
 }
 
@@ -74,13 +66,5 @@ int			main(void)
 		//visualise_map(map);
 	}
 	free_map(&map);
-	// return (iter_result > -1 ? 1 : FAILURE_CODE);
-	
-	/*
-	**	the code below helps to understand that segfault isn't appears
-	*/
-
-	write(2, "endless loop now!\n", 18); // DEL
-	while (1); // DEL
-	return (1); // DEL
+	return (iter_result > -1 ? 1 : FAILURE_CODE);
 }

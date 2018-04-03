@@ -12,8 +12,6 @@
 
 #include "ollevche_filler.h"
 
-// TODO: improve file structure
-
 int			execute_algorithm(t_map *map)
 {
 	t_piece *piece;
@@ -57,10 +55,7 @@ int			main(void)
 	map->iteration = 1;
 	iter_result = 1;
 	while (iter_result > 0)
-	{
 		iter_result = execute_algorithm(map);
-		//visualise_map(map);
-	}
 	free_map(&map);
 	return (iter_result > -1 ? 1 : FAILURE_CODE);
 }

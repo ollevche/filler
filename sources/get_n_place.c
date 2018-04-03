@@ -89,7 +89,7 @@ t_piece		*get_piece(void)
 
 //it wouldn't works with empty cells outside of map borders
 
-static int		get_sum(t_map *map, t_piece *piece, int mi, int mj)
+static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
 {
 	int	ally_col;
 	int	sum;
@@ -118,7 +118,7 @@ static int		get_sum(t_map *map, t_piece *piece, int mi, int mj)
 	return (ally_col == 1 && !(pi + pj) ? sum : INT_MAX);
 }
 
-t_pos			*place_piece(t_map *map, t_piece *piece)
+t_pos		*place_piece(t_map *map, t_piece *piece)
 {
 	t_pos	*position;
 	int		i;

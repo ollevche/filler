@@ -12,11 +12,7 @@
 
 #include "ollevche_filler.h"
 
-// TODO: move safe_gnl() to library
 // TODO: improve file structure
-// TODO: leaks
-// TODO: ft_strsplit review
-// TODO: norminette
 
 int			execute_algorithm(t_map *map)
 {

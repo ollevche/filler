@@ -14,6 +14,7 @@
 # define OLLEVCHE_FILLER_H
 
 # include "libftprintf.h"
+# include <limits.h>
 
 # define FAILURE_CODE -1
 # define ENEMY_ID 0
@@ -63,15 +64,10 @@ int				set_sides(t_map *map);
 int				update_map(t_map *map);
 
 /*
-**	get_piece.c
+**	get_n_place.c
 */
 
 t_piece			*get_piece(void);
-
-/*
-**	place_piece.c
-**/
-
 t_pos			*place_piece(t_map *map, t_piece *piece);
 
 /*
@@ -81,7 +77,7 @@ t_pos			*place_piece(t_map *map, t_piece *piece);
 int				get_size(int *length, int *width);
 void			free_map(t_map **map);
 void			free_piece(t_piece **map);
-char			*safe_gnl(int fd);
 int				skip_lines(int amount);
+t_pos			*new_position(void);
 
 #endif

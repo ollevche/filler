@@ -91,5 +91,6 @@ int			update_map(t_map *map)
 		}
 		i++;
 	}
+	ft_free_strarr(&latest);
 	return (updates);
 }

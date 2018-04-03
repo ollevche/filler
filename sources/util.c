@@ -61,16 +61,17 @@ void	free_piece(t_piece **piece)
 	*piece = NULL;
 }
 
-char	*safe_gnl(int fd)
+t_pos	*new_position(void)
 {
-	char	*line;
-	int		ret_value;
+	t_pos	*position;
 
-	line = NULL;
-	ret_value = get_next_line(fd, &line);
-	if (ret_value == -1)
-		ft_memdel((void**)&line);
-	return (line);
+	position = (t_pos*)malloc(sizeof(t_pos));
+	if (!position)
+		return (NULL);
+	position->sum = INT_MAX;
+	position->length = -1;
+	position->width = -1;
+	return (position);
 }
 
 int		skip_lines(int amount)

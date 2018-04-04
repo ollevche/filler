@@ -87,8 +87,6 @@ t_piece		*get_piece(void)
 	return (piece);
 }
 
-//it wouldn't works with empty cells outside of map borders
-
 static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
 {
 	int	ally_col;

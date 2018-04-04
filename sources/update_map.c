@@ -56,6 +56,7 @@ static int	set_enemy_cell(t_map *map, int enemy_i, int enemy_j)
 			{
 				map->field[i][j] += (enemy_i - i) * (enemy_i > i ? 1 : -1);
 				map->field[i][j] += (enemy_j - j) * (enemy_j > j ? 1 : -1);
+				map->field[i][j] += map->field[i][j] / map->iteration + 1;
 			}
 			else if (map->field[i][j] != ALLY_ID)
 				map->field[i][j] = ENEMY_ID;

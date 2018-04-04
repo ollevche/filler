@@ -12,6 +12,67 @@
 
 #include "ollevche_filler.h"
 
+#include <fcntl.h>
+static void	put_map(t_map *map)
+{
+	int		i;
+	int		j;
+	char	*str;
+	int		fd;
+
+	fd = open("debug", O_RDWR | O_APPEND);
+	i = 0;
+	while (i < map->length)
+	{
+		j = 0;
+		while (j < map->width)
+		{
+			str = ft_itoa(map->field[i][j]);
+			write(fd, str, ft_strlen(str));
+			write(fd, "\t", 1);
+			j++;
+		}
+		write(fd, "\n", 1);
+		i++;
+	}
+	write(fd, "\n", 1);
+	close(fd);
+}
+
+static void	put_piece(t_piece *piece)
+{
+	int		i;
+	int		j;
+	char	*str;
+	int		fd;
+
+	fd = open("debug", O_RDWR | O_APPEND);
+	i = 0;
+	while (i < piece->length)
+	{
+		j = 0;
+		while (j < piece->width)
+		{
+			str = ft_itoa(piece->field[i][j]);
+			write(fd, str, ft_strlen(str));
+			write(fd, "\t", 1);
+			j++;
+		}
+		write(fd, "\n", 1);
+		i++;
+	}
+	write(fd, "\n", 1);
+	close(fd);
+}
+
+static void	clear(void)
+{
+	int fd;
+
+	fd = open("debug", O_RDWR | O_TRUNC);
+	close(fd);
+}
+
 int			execute_algorithm(t_map *map)
 {
 	t_piece *piece;
@@ -22,9 +83,11 @@ int			execute_algorithm(t_map *map)
 	updates = update_map(map);
 	if (updates == FAILURE_CODE)
 		return (FAILURE_CODE);
+	put_map(map);//DEL
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
+	put_piece(piece);//DEL
 	position = place_piece(map, piece);
 	free_piece(&piece);
 	if (!position)
@@ -43,6 +106,7 @@ int			main(void)
 	t_map	*map;
 	int		iter_result;
 
+	clear(); //DEL
 	map = (t_map*)malloc(sizeof(t_map));
 	if (!map)
 		return (FAILURE_CODE);

@@ -19,6 +19,7 @@
 # define FAILURE_CODE -1
 # define ENEMY_ID 0
 # define ALLY_ID -1
+# define INITIAL_ID -2
 
 typedef struct	s_map
 {
@@ -49,13 +50,6 @@ typedef struct	s_pos
 */
 
 int				execute_algorithm(t_map *map);
-
-/*
-**	setters.c
-*/
-
-int				set_default_field(t_map *map);
-int				set_sides(t_map *map);
 
 /*
 **	update_map.c

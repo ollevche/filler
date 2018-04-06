@@ -12,114 +12,91 @@
 
 #include "ollevche_filler.h"
 
-#include <fcntl.h>
-static void	put_map(t_map *map)
+static int	set_field(t_map *map)
 {
-	int		i;
-	int		j;
-	char	*str;
-	int		fd;
+	int	i;
+	int	j;
 
-	fd = open("debug", O_RDWR | O_APPEND);
+	if (get_size(&(map->length), &(map->width)) == FAILURE_CODE)
+		return (FAILURE_CODE);
+	if (map->iteration == 0)
+		map->field = (int**)malloc(sizeof(int*) * map->length);
+	if (!map->field)
+		return (FAILURE_CODE);
 	i = 0;
 	while (i < map->length)
 	{
+		if (map->iteration == 0)
+			map->field[i] = (int*)malloc(sizeof(int) * map->width);
+		if (!map->field[i])
+			return (FAILURE_CODE);
 		j = 0;
 		while (j < map->width)
 		{
-			str = ft_itoa(map->field[i][j]);
-			write(fd, str, ft_strlen(str));
-			write(fd, "\t", 1);
+			map->field[i][j] = INITIAL_ID;
 			j++;
 		}
-		write(fd, "\n", 1);
 		i++;
 	}
-	write(fd, "\n", 1);
-	close(fd);
-}
-
-static void	put_piece(t_piece *piece)
-{
-	int		i;
-	int		j;
-	char	*str;
-	int		fd;
-
-	fd = open("debug", O_RDWR | O_APPEND);
-	i = 0;
-	while (i < piece->length)
-	{
-		j = 0;
-		while (j < piece->width)
-		{
-			str = ft_itoa(piece->field[i][j]);
-			write(fd, str, ft_strlen(str));
-			write(fd, "\t", 1);
-			j++;
-		}
-		write(fd, "\n", 1);
-		i++;
-	}
-	write(fd, "\n", 1);
-	close(fd);
-}
-
-static void	clear(void)
-{
-	int fd;
-
-	fd = open("debug", O_RDWR | O_TRUNC);
-	close(fd);
+	return (1);
 }
 
 int			execute_algorithm(t_map *map)
 {
 	t_piece *piece;
 	t_pos	*position;
-	int		updates;
-	int		iter_result;
+	int		is_placed;
 
-	updates = update_map(map);
-	if (updates == FAILURE_CODE)
+	if (set_field(map) == FAILURE_CODE)
 		return (FAILURE_CODE);
-	put_map(map);//DEL
+	if (update_map(map) == FAILURE_CODE)
+		return (FAILURE_CODE);
+	put_map(map);
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
-	put_piece(piece);//DEL
 	position = place_piece(map, piece);
 	free_piece(&piece);
 	if (!position)
 		return (FAILURE_CODE);
 	ft_printf("%d %d\n", position->length, position->width);
-	iter_result = 1;
-	if (position->length < 0 && position->width < 0)
-		iter_result = 0;
+	is_placed = 1;
+	if (position->length < 0 || position->width < 0)
+		is_placed = 0;
 	free(position);
 	map->iteration++;
-	return (updates || iter_result);
+	return (is_placed);
+}
+
+static int	set_sides(t_map *map)
+{
+	char	*player_exec;
+	int		is_p1;
+
+	player_exec = safe_gnl(0);
+	if (!player_exec)
+		return (FAILURE_CODE);
+	is_p1 = ft_strstr(player_exec, "p1") ? 1 : 0;
+	map->ally = is_p1 ? 'o' : 'x';
+	map->enemy = is_p1 ? 'x' : 'o';
+	free(player_exec);
+	return (1);
 }
 
 int			main(void)
 {
 	t_map	*map;
-	int		iter_result;
 
-	clear(); //DEL
 	map = (t_map*)malloc(sizeof(t_map));
 	if (!map)
 		return (FAILURE_CODE);
-	if (set_sides(map) == FAILURE_CODE ||
-		set_default_field(map) == FAILURE_CODE)
+	if (set_sides(map) == FAILURE_CODE)
 	{
 		free_map(&map);
 		return (FAILURE_CODE);
 	}
-	map->iteration = 1;
-	iter_result = 1;
-	while (iter_result > 0)
-		iter_result = execute_algorithm(map);
+	map->iteration = 0;
+	while (execute_algorithm(map) > 0);
 	free_map(&map);
-	return (iter_result > -1 ? 1 : FAILURE_CODE);
+	return (1);
 }

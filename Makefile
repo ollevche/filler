@@ -21,7 +21,7 @@ OBJDIR	=	./objects/
 
 LIBDIR	=	./libft/
 
-SRC		=	main.c setters.c update_map.c get_n_place.c util.c
+SRC		=	main.c update_map.c get_n_place.c util.c
 
 OBJ		=	$(addprefix $(OBJDIR), $(SRC:.c=.o))
 

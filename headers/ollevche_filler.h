@@ -45,33 +45,13 @@ typedef struct	s_pos
 	int	sum;
 }				t_pos;
 
-/*
-**	main.c
-*/
-
 int				execute_algorithm(t_map *map);
-
-/*
-**	update_map.c
-*/
-
 int				update_map(t_map *map);
-
-/*
-**	get_n_place.c
-*/
-
 t_piece			*get_piece(void);
 t_pos			*place_piece(t_map *map, t_piece *piece);
-
-/*
-**	util.c
-*/
-
 int				get_size(int *length, int *width);
-void			free_map(t_map **map);
-void			free_piece(t_piece **map);
+void			free_piece(t_piece **piece);
+
 int				skip_lines(int amount);
-t_pos			*new_position(void);
 
 #endif

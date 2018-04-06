@@ -12,63 +12,12 @@
 
 #include "ollevche_filler.h"
 
-static int	set_field(t_map *map)
-{
-	int	i;
-	int	j;
+//TODO: move skip_lines(int fd, int amount) to lib
+//TODO: remove t_pos
+//TODO: get_map() checking
+//TODO: whole review
 
-	if (get_size(&(map->length), &(map->width)) == FAILURE_CODE)
-		return (FAILURE_CODE);
-	if (map->iteration == 0)
-		map->field = (int**)malloc(sizeof(int*) * map->length);
-	if (!map->field)
-		return (FAILURE_CODE);
-	i = 0;
-	while (i < map->length)
-	{
-		if (map->iteration == 0)
-			map->field[i] = (int*)malloc(sizeof(int) * map->width);
-		if (!map->field[i])
-			return (FAILURE_CODE);
-		j = 0;
-		while (j < map->width)
-		{
-			map->field[i][j] = INITIAL_ID;
-			j++;
-		}
-		i++;
-	}
-	return (1);
-}
-
-int			execute_algorithm(t_map *map)
-{
-	t_piece *piece;
-	t_pos	*position;
-	int		is_placed;
-
-	if (set_field(map) == FAILURE_CODE)
-		return (FAILURE_CODE);
-	if (update_map(map) == FAILURE_CODE)
-		return (FAILURE_CODE);
-	put_map(map);
-	piece = get_piece();
-	if (!piece)
-		return (FAILURE_CODE);
-	position = place_piece(map, piece);
-	free_piece(&piece);
-	if (!position)
-		return (FAILURE_CODE);
-	ft_printf("%d %d\n", position->length, position->width);
-	is_placed = 1;
-	if (position->length < 0 || position->width < 0)
-		is_placed = 0;
-	free(position);
-	map->iteration++;
-	return (is_placed);
-}
-
-static int	set_sides(t_map *map)
+static int		set_sides(t_map *map)
 {
 	char	*player_exec;
 	int		is_p1;
@@ -83,20 +32,69 @@ static int	set_sides(t_map *map)
 	return (1);
 }
 
-int			main(void)
+static t_map	*get_map(void)
 {
 	t_map	*map;
+	int		i;
 
 	map = (t_map*)malloc(sizeof(t_map));
 	if (!map)
-		return (FAILURE_CODE);
-	if (set_sides(map) == FAILURE_CODE)
+		return (NULL);
+	set_sides(map);
+	get_size(&(map->length), &(map->width));
+	map->field = (int**)malloc(sizeof(int*) * map->length);
+	i = 0;
+	while (i < map->length)
 	{
-		free_map(&map);
-		return (FAILURE_CODE);
+		map->field[i] = (int*)malloc(sizeof(int) * map->width);
+		i++;
 	}
 	map->iteration = 0;
+	return (map);
+}
+
+static void		free_map(t_map **map)
+{
+	int i;
+
+	i = 0;
+	while ((*map)->field[i] && i < (*map)->length)
+	{
+		free((*map)->field[i]);
+		i++;
+	}
+	free((*map)->field);
+	free(*map);
+	*map = NULL;
+}
+
+int				main(void)
+{
+	t_map	*map;
+
+	map = get_map();
+	if (!map)
+		return (FAILURE_CODE);
 	while (execute_algorithm(map) > 0);
 	free_map(&map);
+	return (1);
+}
+
+int		get_size(int *length, int *width)
+{
+	char	*input;
+	char	**props;
+
+	if (!(input = safe_gnl(0)))
+		return (FAILURE_CODE);
+	props = ft_strsplit(input, ' ');
+	free(input);
+	if (!props || !*props)
+		return (FAILURE_CODE);
+	if (length)
+		*length = ft_atoi(props[1]);
+	if (width)
+		*width = ft_atoi(props[2]);
+	ft_free_strarr(&props);
 	return (1);
 }

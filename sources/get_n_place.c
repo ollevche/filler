@@ -116,6 +116,19 @@ static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
 	return (ally_col == 1 && !(pi + pj) ? sum : INT_MAX);
 }
 
+static t_pos	*new_position(void)
+{
+	t_pos	*position;
+
+	position = (t_pos*)malloc(sizeof(t_pos));
+	if (!position)
+		return (NULL);
+	position->sum = INT_MAX;
+	position->length = -1;
+	position->width = -1;
+	return (position);
+}
+
 t_pos		*place_piece(t_map *map, t_piece *piece)
 {
 	t_pos	*position;

@@ -31,6 +31,7 @@ all: $(NAME)
 
 $(NAME): $(OBJDIR) $(OBJ) $(LIBDIR)$(LIB)
 	@echo "creating filler binary"
+	@cp $(LIBDIR)$(LIB) ./
 	@gcc -o $(NAME) $(OBJ) $(LIB) $(FLAGS)
 
 $(OBJ): $(OBJDIR)%.o : $(SRCDIR)%.c
@@ -39,7 +40,6 @@ $(OBJ): $(OBJDIR)%.o : $(SRCDIR)%.c
 
 $(LIBDIR)$(LIB):
 	@make -C $(LIBDIR)
-	@cp $(LIBDIR)$(LIB) ./
 
 $(OBJDIR):
 	@mkdir $(OBJDIR)
@@ -49,12 +49,12 @@ clean:
 	@echo "removing filler object files"
 	@rm -rf $(OBJ) $(OBJDIR)
 
-fclean: clean
+fclean:
 	@make -C $(LIBDIR) fclean
+	@echo "removing filler object files"
+	@rm -rf $(OBJ) $(OBJDIR)
 	@echo "removing filler binary"
 	@rm -rf $(NAME) $(LIB)
 
 re: fclean $(NAME)
 	
-test: test.c $(LIBDIR)$(LIB)
-	@gcc -o test test.c $(LIB) $(FLAGS)

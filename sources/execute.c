@@ -22,8 +22,9 @@ static void		set_field(t_map *map)
 int				execute_algorithm(t_map *map)
 {
 	t_piece *piece;
-	t_pos	*position;
 	int		is_placed;
+	int		x;
+	int		y;
 
 	set_field(map);
 	if (map->iteration && skip_lines(1) == FAILURE_CODE)
@@ -33,15 +34,11 @@ int				execute_algorithm(t_map *map)
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
-	position = place_piece(map, piece);
+	*x = -1;
+	*y = -1;
+	is_placed = place_piece(map, piece, &x, &y);
 	free_piece(&piece);
-	if (!position)
-		return (FAILURE_CODE);
-	ft_printf("%d %d\n", position->length, position->width);
-	is_placed = 1;
-	if (position->length < 0 || position->width < 0)
-		is_placed = 0;
-	free(position);
+	ft_printf("%d %d\n", x, y);
 	map->iteration++;
 	return (is_placed);
 }

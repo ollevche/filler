@@ -62,7 +62,9 @@ static void	mark_as(t_map *map, char **latest, int target, int mark)
 
 static int	update_cell(t_map *map, int i, int j, int new_id)
 {
-	if (i < 0 || i >= map->length || j < 0 || j >= map->width)
+	if (i < 0 || i >= map->length)
+		return (0);
+	if (j < 0 || j >= map->width)
 		return (0);
 	if (map->field[i][j] != -2)
 		return (0);

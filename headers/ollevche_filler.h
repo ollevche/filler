@@ -38,20 +38,31 @@ typedef struct	s_piece
 	int	width;
 }				t_piece;
 
-typedef struct	s_pos
-{
-	int	length;
-	int	width;
-	int	sum;
-}				t_pos;
+/*
+**	main.c
+*/
+
+int				get_size(int *length, int *width);
+
+/*
+**	execute.c
+*/
 
 int				execute_algorithm(t_map *map);
-int				update_map(t_map *map);
-t_piece			*get_piece(void);
-t_pos			*place_piece(t_map *map, t_piece *piece);
-int				get_size(int *length, int *width);
 void			free_piece(t_piece **piece);
+int				skip_lines(int amount); //move it
 
-int				skip_lines(int amount);
+/*
+**	get_n_place.c
+*/
+
+t_piece			*get_piece(void);
+int				place_piece(t_map *map, t_piece *piece, int *x, int *y);
+
+/*
+**	update_map.c
+*/
+
+int				update_map(t_map *map);
 
 #endif

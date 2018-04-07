@@ -12,6 +12,10 @@
 
 #include "ollevche_filler.h"
 
+/*
+**	get_piece()
+*/
+
 static char	**read_strarr(int length)
 {
 	char	**strarr;
@@ -87,6 +91,10 @@ t_piece		*get_piece(void)
 	return (piece);
 }
 
+/*
+**	place_piece()
+*/
+
 static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
 {
 	int	ally_col;
@@ -96,64 +104,50 @@ static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
 
 	ally_col = 0;
 	sum = 0;
-	pi = -1;
-	while (++pi < piece->length && pi + mi < map->length)
+	pi = 0;
+	while (pi < piece->length)
 	{
 		pj = -1;
-		while (++pj < piece->width && pj + mj < map->width)
+		while (pj < piece->width)
+		{
 			if (piece->field[pi][pj])
 			{
-				if (map->field[mi + pi][mj + pj] == ALLY_ID)
-					ally_col++;
-				else if (map->field[mi + pi][mj + pj] == ENEMY_ID)
+				ally_col += map->field[mi + pi][mj + pj] == ALLY_ID;
+				if (map->field[mi + pi][mj + pj] == ENEMY_ID || ally_col > 1)
 					return (INT_MAX);
-				else
-					sum += map->field[mi + pi][mj + pj];
+				sum += map->field[mi + pi][mj + pj];
 			}
+			pj++;
+		}
+		pi++;
 	}
-	pi -= piece->length;
-	pj -= piece->width;
-	return (ally_col == 1 && !(pi + pj) ? sum : INT_MAX);
+	return (ally_col ? sum : INT_MAX);
 }
 
-static t_pos	*new_position(void)
+int			place_piece(t_map *map, t_piece *piece, int *x, int *y)
 {
-	t_pos	*position;
-
-	position = (t_pos*)malloc(sizeof(t_pos));
-	if (!position)
-		return (NULL);
-	position->sum = INT_MAX;
-	position->length = -1;
-	position->width = -1;
-	return (position);
-}
-
-t_pos		*place_piece(t_map *map, t_piece *piece)
-{
-	t_pos	*position;
 	int		i;
 	int		j;
 	int		cur_sum;
+	int		best_sum;
 
-	if (!(position = new_position()))
-		return (NULL);
+	best_sum = INT_MAX;
 	i = 0;
-	while (i < map->length)
+	while (i <= map->length - piece->length)
 	{
 		j = 0;
-		while (j < map->width)
+		while (j <= map->width - piece->width)
 		{
 			cur_sum = get_sum(map, piece, i, j);
-			if (cur_sum < position->sum)
+			if (cur_sum < best_sum)
 			{
-				position->length = i;
-				position->width = j;
-				position->sum = cur_sum;
+				*x = i;
+				*y = j;
+				best_sum = cur_sum;
 			}
 			j++;
 		}
 		i++;
 	}
-	return (position);
+	return (best_sum != INT_MAX);
 }

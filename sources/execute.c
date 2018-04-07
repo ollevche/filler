@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ollevche <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/04/07 17:13:26 by ollevche          #+#    #+#             */
+/*   Updated: 2018/04/07 17:13:26 by ollevche         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "ollevche_filler.h"
 
-static void		set_field(t_map *map)
+static void	set_field(t_map *map)
 {
 	int	i;
 	int	j;
@@ -19,7 +30,7 @@ static void		set_field(t_map *map)
 	}
 }
 
-int				execute_algorithm(t_map *map)
+int			execute_algorithm(t_map *map)
 {
 	t_piece *piece;
 	int		is_placed;
@@ -27,15 +38,15 @@ int				execute_algorithm(t_map *map)
 	int		y;
 
 	set_field(map);
-	if (map->iteration && skip_lines(1) == FAILURE_CODE)
+	if (map->iteration && skip_lines(0, 1) == FAILURE_CODE)
 		return (FAILURE_CODE);
 	if (update_map(map) == FAILURE_CODE)
 		return (FAILURE_CODE);
 	piece = get_piece();
 	if (!piece)
 		return (FAILURE_CODE);
-	*x = -1;
-	*y = -1;
+	x = -1;
+	y = -1;
 	is_placed = place_piece(map, piece, &x, &y);
 	free_piece(&piece);
 	ft_printf("%d %d\n", x, y);
@@ -43,7 +54,7 @@ int				execute_algorithm(t_map *map)
 	return (is_placed);
 }
 
-void	free_piece(t_piece **piece)
+void		free_piece(t_piece **piece)
 {
 	int i;
 
@@ -56,21 +67,4 @@ void	free_piece(t_piece **piece)
 	free((*piece)->field);
 	free(*piece);
 	*piece = NULL;
-}
-
-int		skip_lines(int amount)
-{
-	int		i;
-	char	*line;
-
-	i = 0;
-	while (i < amount)
-	{
-		line = safe_gnl(0);
-		if (!line)
-			return (FAILURE_CODE);
-		free(line);
-		i++;
-	}
-	return (1);
 }

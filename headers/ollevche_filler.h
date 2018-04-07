@@ -50,7 +50,6 @@ int				get_size(int *length, int *width);
 
 int				execute_algorithm(t_map *map);
 void			free_piece(t_piece **piece);
-int				skip_lines(int amount); //move it
 
 /*
 **	get_n_place.c

@@ -18,7 +18,7 @@ static char	**read_field(t_map *map)
 	char		*line;
 	int			i;
 
-	if (skip_lines(1) == FAILURE_CODE)
+	if (skip_lines(0, 1) == FAILURE_CODE)
 		return (NULL);
 	field = (char**)malloc(sizeof(char*) * (map->length + 1));
 	if (!field)

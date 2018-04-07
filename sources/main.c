@@ -12,9 +12,7 @@
 
 #include "ollevche_filler.h"
 
-//TODO: move skip_lines(int fd, int amount) to lib
-
-int		get_size(int *length, int *width)
+int			get_size(int *length, int *width)
 {
 	char	*input;
 	char	**props;
@@ -33,7 +31,7 @@ int		get_size(int *length, int *width)
 	return (1);
 }
 
-static int		set_sides(t_map *map)
+static int	set_sides(t_map *map)
 {
 	char	*player_exec;
 	int		is_p1;
@@ -48,7 +46,7 @@ static int		set_sides(t_map *map)
 	return (1);
 }
 
-static void		free_map(t_map **map)
+static void	free_map(t_map **map)
 {
 	int i;
 
@@ -63,7 +61,7 @@ static void		free_map(t_map **map)
 	*map = NULL;
 }
 
-static int		**new_field(int length, int width)
+static int	**new_field(int length, int width)
 {
 	int	**field;
 	int	i;
@@ -87,7 +85,7 @@ static int		**new_field(int length, int width)
 	return (field);
 }
 
-int				main(void)
+int			main(void)
 {
 	t_map	*map;
 	int		set_side;
@@ -103,7 +101,8 @@ int				main(void)
 	if (set_side != FAILURE_CODE && got_size != FAILURE_CODE)
 		map->field = new_field(map->length, map->width);
 	if (map->field)
-		while (execute_algorithm(map) > 0);
+		while (execute_algorithm(map) > 0)
+			;
 	free_map(&map);
 	return (1);
 }

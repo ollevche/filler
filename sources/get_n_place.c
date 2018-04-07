@@ -95,7 +95,7 @@ t_piece		*get_piece(void)
 **	place_piece()
 */
 
-static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
+static int	calc_sum(t_map *map, t_piece *piece, int mi, int mj)
 {
 	int	ally_col;
 	int	sum;
@@ -107,7 +107,7 @@ static int	get_sum(t_map *map, t_piece *piece, int mi, int mj)
 	pi = 0;
 	while (pi < piece->length)
 	{
-		pj = -1;
+		pj = 0;
 		while (pj < piece->width)
 		{
 			if (piece->field[pi][pj])
@@ -138,7 +138,7 @@ int			place_piece(t_map *map, t_piece *piece, int *x, int *y)
 		j = 0;
 		while (j <= map->width - piece->width)
 		{
-			cur_sum = get_sum(map, piece, i, j);
+			cur_sum = calc_sum(map, piece, i, j);
 			if (cur_sum < best_sum)
 			{
 				*x = i;

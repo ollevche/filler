@@ -39,7 +39,7 @@ static char	**read_strarr(int length)
 	return (strarr);
 }
 
-static int	convert_to_piece(char **strarr, t_piece *piece)
+static int	convert_to_field(char **strarr, t_piece *piece)
 {
 	int		i;
 	int		j;
@@ -84,7 +84,7 @@ t_piece		*get_piece(void)
 		piece->width = ft_strlen(strarr[0]);
 		piece->length = length;
 		piece->field = NULL;
-		if (convert_to_piece(strarr, piece) == FAILURE_CODE)
+		if (convert_to_field(strarr, piece) == FAILURE_CODE)
 			free_piece(&piece);
 	}
 	ft_free_strarr(&strarr);
@@ -124,7 +124,7 @@ static int	calc_sum(t_map *map, t_piece *piece, int mi, int mj)
 	return (ally_col ? sum : INT_MAX);
 }
 
-int			place_piece(t_map *map, t_piece *piece, int *x, int *y)
+int			place_piece(t_map *map, t_piece *piece, int *r_len, int *r_wid)
 {
 	int		i;
 	int		j;
@@ -141,8 +141,8 @@ int			place_piece(t_map *map, t_piece *piece, int *x, int *y)
 			cur_sum = calc_sum(map, piece, i, j);
 			if (cur_sum < best_sum)
 			{
-				*x = i;
-				*y = j;
+				*r_len = i;
+				*r_wid = j;
 				best_sum = cur_sum;
 			}
 			j++;
